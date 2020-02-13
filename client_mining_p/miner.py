@@ -1,5 +1,6 @@
 import hashlib
 import requests
+from time import time
 
 import sys
 import json
@@ -13,7 +14,17 @@ def proof_of_work(block):
     in an effort to find a number that is a valid proof
     :return: A valid proof for the provided block
     """
-    pass
+    block_string = json.dumps(block, sort_keys=True)
+    proof = 0
+    start_time = time()
+    print("Searching for coins")
+    while self.valid_proof(block_string, proof) is False:
+        proof += 1
+    end_time = time()
+
+    print("Coin found")
+    print(f'It took{end_time-start_time} seconds.')
+    return proof
 
 
 def valid_proof(block_string, proof):
@@ -27,7 +38,10 @@ def valid_proof(block_string, proof):
     correct number of leading zeroes.
     :return: True if the resulting hash is a valid proof, False otherwise
     """
-    pass
+    guess = f'{block_string}{proof}'.encode()
+    guess_hash = hashlib.sha256(guess).hexdigest()
+
+    return guess_hash[:6] == "000000"
 
 
 if __name__ == '__main__':
